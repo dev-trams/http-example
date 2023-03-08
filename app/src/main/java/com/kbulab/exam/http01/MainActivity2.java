@@ -8,6 +8,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -24,6 +25,12 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 webView.setVisibility(View.INVISIBLE);
+                textView.setVisibility(View.VISIBLE);
+                textView.setText("");
+                String page = editText.getText().toString();
+                if(page.equals("")) {
+                    Toast.makeText(MainActivity2.this, "URL입력", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
