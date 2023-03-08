@@ -33,10 +33,17 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                html = DownloadHtml(page);
-                textView.setVisibility(View.VISIBLE);
-                webView.setVisibility(View.INVISIBLE);
-                textView.setText(html);
+                DownLoad thread = new DownLoad(MainActivity.this, page);
+                thread.start();
+                try {
+                    thread.join();
+                    html = thread.getResult();
+                    textView.setVisibility(View.VISIBLE);
+                    webView.setVisibility(View.INVISIBLE);
+                    textView.setText(html);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         Button button1 = (Button) findViewById(R.id.button02);

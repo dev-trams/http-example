@@ -39,9 +39,21 @@ public class MainActivity2 extends AppCompatActivity {
                         textView.setText(html);
                     } catch (InterruptedException e) {
                         Toast.makeText(MainActivity2.this, "오류", Toast.LENGTH_SHORT).show();
-
                     }
+                }
+            }
+        });
 
+        Button button2 = (Button) findViewById(R.id.button02);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(html.equals("")) {
+                    Toast.makeText(MainActivity2.this, "페이지 없습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    textView.setVisibility(View.INVISIBLE);
+                    webView.setVisibility(View.VISIBLE);
+                    webView.loadDataWithBaseURL(null, html,  "Text/html", "UTF-8", null);
                 }
             }
         });
