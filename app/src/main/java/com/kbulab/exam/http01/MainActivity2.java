@@ -11,14 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity2 extends AppCompatActivity {
-
+    String html = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         EditText editText = (EditText) findViewById(R.id.editText);
         TextView textView = (TextView) findViewById(R.id.textView);
-        WebView webView = (WebView) findViewById(R.id.webpage1);
+        WebView webView = (WebView) findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         Button button = (Button) findViewById(R.id.button01);
         button.setOnClickListener(new View.OnClickListener() {
@@ -31,7 +31,17 @@ public class MainActivity2 extends AppCompatActivity {
                 if(page.equals("")) {
                     Toast.makeText(MainActivity2.this, "URL입력", Toast.LENGTH_SHORT).show();
                 } else {
-                    DownloadWebPage();
+                    DownloadWebPage thread = new DownloadWebPage(MainActivity2.this, page);
+                    thread.start();
+                    try {
+                        thread.join();
+                        html = thread.getResult();
+                        textView.setText(html);
+                    } catch (InterruptedException e) {
+                        Toast.makeText(MainActivity2.this, "오류", Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
             }
         });
