@@ -30,8 +30,14 @@ public class MainActivity2 extends AppCompatActivity {
                 String page = editText.getText().toString();
                 if(page.equals("")) {
                     Toast.makeText(MainActivity2.this, "URL입력", Toast.LENGTH_SHORT).show();
+                } else {
+                    DownloadWebPage();
                 }
             }
         });
+    }
+
+    private void DownloadWebPage() {
+
     }
 }
