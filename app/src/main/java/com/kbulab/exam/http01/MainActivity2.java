@@ -37,7 +37,5 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
-    private void DownloadWebPage() {
 
-    }
 }
