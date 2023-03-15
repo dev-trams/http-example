@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DownLoad thread = new DownLoad(MainActivity.this, page);
+              /*  DownLoad thread = new DownLoad(MainActivity.this, page);
                 thread.start();
                 try {
                     thread.join();
@@ -43,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
                     textView.setText(html);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
-                }
+                }*/
+                DownAsyncTask task = new DownAsyncTask(getBaseContext());
+
             }
         });
         Button button1 = (Button) findViewById(R.id.button02);
