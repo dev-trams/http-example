@@ -1,9 +1,14 @@
 package com.kbulab.exam.http01;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -16,10 +21,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     String page = "https://developer.android.com";
     String html = "";
+    int type = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,19 +40,32 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              /*  DownLoad thread = new DownLoad(MainActivity.this, page);
-                thread.start();
-                try {
-                    thread.join();
-                    html = thread.getResult();
-                    textView.setVisibility(View.VISIBLE);
-                    webView.setVisibility(View.INVISIBLE);
-                    textView.setText(html);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }*/
-                DownAsyncTask task = new DownAsyncTask(getBaseContext());
 
+                if(type == 1) {
+                    DownLoad thread = new DownLoad(MainActivity.this, page);
+                    thread.start();
+                    try {
+                        thread.join();
+                        html = thread.getResult();
+                        textView.setVisibility(View.VISIBLE);
+                        webView.setVisibility(View.INVISIBLE);
+                        textView.setText(html);
+                        textView.setTextColor(Color.BLACK);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else if(type == 2) {
+                    DownAsyncTask task = new DownAsyncTask(MainActivity.this);
+                    try {
+                        html = task.execute(page).get();
+                        textView.setVisibility(View.VISIBLE);
+                        webView.setVisibility(View.INVISIBLE);
+                        textView.setText(html);
+                        textView.setTextColor(Color.BLUE);
+                    } catch (ExecutionException | InterruptedException e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
         Button button1 = (Button) findViewById(R.id.button02);
@@ -86,5 +106,26 @@ public class MainActivity extends AppCompatActivity {
             connection.disconnect();
         }
         return result;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1:
+                type = 1;
+                break;
+            case R.id.item2:
+                type = 2;
+                break;
+        }
+        item.setChecked(true);
+        return super.onOptionsItemSelected(item);
     }
 }
